@@ -3,6 +3,8 @@ package rcon
 import (
 	"bytes"
 	"errors"
+	"fmt"
+	"log"
 	"net"
 )
 
@@ -30,6 +32,7 @@ type Client struct {
 func NewClient(conn net.Conn, pass string) (Client, error) {
 	client := Client{
 		conn: conn,
+		id:   0,
 	}
 	packet := Packet{
 		Type:    login,
@@ -42,7 +45,7 @@ func NewClient(conn net.Conn, pass string) (Client, error) {
 	if send.RequestId == -1 {
 		return Client{}, errors.New("incorrect password")
 	}
-	if send.Type != 2 || send.RequestId != client.id {
+	if send.Type != command || send.RequestId != client.id {
 		return client, errors.New("illegal state")
 	}
 	return client, nil
@@ -53,9 +56,12 @@ func (client Client) Send(exec string) error {
 		Type:    command,
 		Payload: []byte(exec),
 	}
-	_, err := client.send(packet)
+	send, err := client.send(packet)
 	if err != nil {
 		return err
+	}
+	if send.Type != commandResponse {
+		return errors.New("incorrect response")
 	}
 	return nil
 }
@@ -73,12 +79,17 @@ func (client Client) send(packet Packet) (Packet, error) {
 }
 
 func (client Client) write(packet Packet) error {
-	packet.Length = int32(4 + 4 + len(packet.Payload) + 2)
 	packet.RequestId = client.id
 	packet.Padding = []byte{0x0, 0x0}
+	packet.Length = int32(4 + 4 + len(packet.Payload) + len(packet.Padding))
 	operator := binaryOperator{
 		buf: new(bytes.Buffer),
 	}
+	log.Println(fmt.Sprintf("length:%d", packet.Length))
+	log.Println(fmt.Sprintf("requestId:%d", packet.RequestId))
+	log.Println(fmt.Sprintf("type:%d", packet.Type))
+	log.Println(fmt.Sprintf("payload:%s", packet.Payload))
+	log.Println(packet.Padding)
 	operator.Write(packet.Length)
 	operator.Write(packet.RequestId)
 	operator.Write(packet.Type)
@@ -113,6 +124,13 @@ func (client Client) read() (Packet, error) {
 	if operator.err != nil {
 		return Packet{}, operator.err
 	}
-	packet.Payload = body[:read-12]
+	packet.Payload = body[:read-14]
+	packet.Padding = body[read-14 : read-12]
+	log.Println(fmt.Sprintf("read size:%d", read))
+	log.Println(fmt.Sprintf("length:%d", packet.Length))
+	log.Println(fmt.Sprintf("requestId:%d", packet.RequestId))
+	log.Println(fmt.Sprintf("type:%d", packet.Type))
+	log.Println(fmt.Sprintf("payload:%s", packet.Payload))
+	log.Println(packet.Padding)
 	return packet, nil
 }
