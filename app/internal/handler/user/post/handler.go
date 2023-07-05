@@ -18,10 +18,7 @@ func NewUserItemHandler(_operator rcon.Operator) {
 func UserItemHandler(w http.ResponseWriter, r *http.Request) {
 	pathParam := strings.TrimPrefix(r.URL.Path, "/users/")
 	_, userId := filepath.Split(pathParam)
-	var request struct {
-		ItemId string `json:"item_id"`
-		Amount int    `json:"amount"`
-	}
+	var request = userItemRequest{}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	list, err := operator.GiveItemToUser(userId, request.ItemId, request.Amount)
 	if err != nil {
@@ -31,4 +28,9 @@ func UserItemHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+}
+
+type userItemRequest struct {
+	ItemId string `json:"item_id"`
+	Amount int    `json:"amount"`
 }
