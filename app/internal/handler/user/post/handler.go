@@ -4,16 +4,21 @@ import (
 	"app/internal/rcon"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 var operator rcon.Operator
 
-func NewPostUserListHandler(_operator rcon.Operator) {
+func NewUserItemHandler(_operator rcon.Operator) {
 	operator = _operator
 }
 
-func PostUserListHandler(writer http.ResponseWriter, _ *http.Request) {
-	list, err := operator.GetUserList()
+func UserItemHandler(writer http.ResponseWriter, request *http.Request) {
+	pathParam := strings.TrimPrefix(request.URL.Path, "/users/")
+	paths := strings.Split(pathParam, "/")
+	userId := paths[0]
+	itemId := paths[2]
+	list, err := operator.GiveItemToUser(userId, itemId)
 	if err != nil {
 		return
 	}

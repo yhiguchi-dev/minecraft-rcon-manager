@@ -8,11 +8,11 @@ import (
 
 var operator rcon.Operator
 
-func NewGetUserListHandler(_operator rcon.Operator) {
+func NewUserListHandler(_operator rcon.Operator) {
 	operator = _operator
 }
 
-func GetUserListHandler(writer http.ResponseWriter, _ *http.Request) {
+func UserListHandler(writer http.ResponseWriter, _ *http.Request) {
 	list, err := operator.GetUserList()
 	if err != nil {
 		return

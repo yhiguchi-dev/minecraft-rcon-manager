@@ -32,11 +32,11 @@ func main() {
 		log.Fatal(err)
 	}
 	operator := rcon.NewOperator(client)
-	get.NewGetUserListHandler(operator)
-	post.NewPostUserListHandler(operator)
+	get.NewUserListHandler(operator)
+	post.NewUserItemHandler(operator)
 
-	http.HandleFunc("/users", get.GetUserListHandler)
-	//http.HandleFunc("/users", post.PostUserListHandler)
+	http.HandleFunc("/users", get.UserListHandler)
+	http.HandleFunc("/users/", post.UserItemHandler)
 
 	hostAddress := os.Getenv("HOST_ADDRESS")
 	server := &http.Server{
