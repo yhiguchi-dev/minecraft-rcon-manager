@@ -13,10 +13,10 @@ FROM gcr.io/distroless/static-debian11:nonroot
 
 WORKDIR /app
 
-COPY --from=builder /build/app ./
+COPY --from=builder /build/main ./
 
 USER nonroot
 
 EXPOSE 8080
 
-CMD [ "/main" ]
+CMD [ "/app/main" ]
