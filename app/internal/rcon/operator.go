@@ -4,7 +4,7 @@ import "fmt"
 
 type Operator interface {
 	GetUserList() (string, error)
-	GiveItemToUser(userId string, itemId string) (string, error)
+	GiveItemToUser(userId string, itemId string, amount int) (string, error)
 }
 
 type operator struct {
@@ -24,8 +24,8 @@ func (operator *operator) GetUserList() (string, error) {
 	return payload, nil
 }
 
-func (operator *operator) GiveItemToUser(userId string, itemId string) (string, error) {
-	packet, err := operator.client.Send(fmt.Sprintf("give %s %s", userId, itemId))
+func (operator *operator) GiveItemToUser(userId string, itemId string, amount int) (string, error) {
+	packet, err := operator.client.Send(fmt.Sprintf("give %s %s %d", userId, itemId, amount))
 	if err != nil {
 		return "", err
 	}

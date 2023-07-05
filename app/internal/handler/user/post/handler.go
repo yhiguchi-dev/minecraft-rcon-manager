@@ -2,8 +2,10 @@ package post
 
 import (
 	"app/internal/rcon"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 )
 
@@ -13,16 +15,19 @@ func NewUserItemHandler(_operator rcon.Operator) {
 	operator = _operator
 }
 
-func UserItemHandler(writer http.ResponseWriter, request *http.Request) {
-	pathParam := strings.TrimPrefix(request.URL.Path, "/users/")
-	paths := strings.Split(pathParam, "/")
-	userId := paths[0]
-	itemId := paths[2]
-	list, err := operator.GiveItemToUser(userId, itemId)
+func UserItemHandler(w http.ResponseWriter, r *http.Request) {
+	pathParam := strings.TrimPrefix(r.URL.Path, "/users/")
+	_, userId := filepath.Split(pathParam)
+	var request struct {
+		ItemId string `json:"item_id"`
+		Amount int    `json:"amount"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	list, err := operator.GiveItemToUser(userId, request.ItemId, request.Amount)
 	if err != nil {
 		return
 	}
-	_, err = fmt.Fprintf(writer, list)
+	_, err = fmt.Fprintf(w, list)
 	if err != nil {
 		return
 	}
