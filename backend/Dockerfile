@@ -7,16 +7,16 @@ RUN go mod download
 
 COPY .. .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o backend ./cmd/main
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/main
 
 FROM gcr.io/distroless/static-debian11:nonroot
 
 WORKDIR /app
 
-COPY --from=builder /backend/build/app ./
+COPY --from=builder /build/app ./
 
 USER nonroot
 
 EXPOSE 8080
 
-CMD [ "/app" ]
+CMD [ "/main" ]
