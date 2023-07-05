@@ -1,9 +1,9 @@
 package get
 
 import (
+	"app/internal/rcon"
 	"fmt"
 	"net/http"
-	"rcon-client/internal/rcon"
 )
 
 var operator rcon.Operator

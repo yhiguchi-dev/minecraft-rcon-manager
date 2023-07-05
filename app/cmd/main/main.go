@@ -1,6 +1,9 @@
 package main
 
 import (
+	"app/internal/handler/user/get"
+	"app/internal/handler/user/post"
+	"app/internal/rcon"
 	"context"
 	"fmt"
 	"log"
@@ -8,9 +11,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"rcon-client/internal/handler/user/get"
-	"rcon-client/internal/handler/user/post"
-	"rcon-client/internal/rcon"
 	"time"
 )
 
