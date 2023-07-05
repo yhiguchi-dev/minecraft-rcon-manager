@@ -51,19 +51,19 @@ func NewClient(conn net.Conn, pass string) (Client, error) {
 	return client, nil
 }
 
-func (client Client) Send(exec string) error {
+func (client Client) Send(exec string) (Packet, error) {
 	packet := Packet{
 		Type:    command,
 		Payload: []byte(exec),
 	}
 	send, err := client.send(packet)
 	if err != nil {
-		return err
+		return Packet{}, err
 	}
 	if send.Type != commandResponse {
-		return errors.New("incorrect response")
+		return Packet{}, errors.New("incorrect response")
 	}
-	return nil
+	return send, nil
 }
 
 func (client Client) send(packet Packet) (Packet, error) {
