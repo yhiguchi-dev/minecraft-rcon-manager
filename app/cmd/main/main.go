@@ -36,7 +36,7 @@ func main() {
 	post.NewPostUserListHandler(operator)
 
 	http.HandleFunc("/users", get.GetUserListHandler)
-	http.HandleFunc("/users", post.PostUserListHandler)
+	//http.HandleFunc("/users", post.PostUserListHandler)
 
 	hostAddress := os.Getenv("HOST_ADDRESS")
 	server := &http.Server{
