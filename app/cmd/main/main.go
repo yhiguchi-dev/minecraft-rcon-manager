@@ -38,8 +38,7 @@ func main() {
 	http.HandleFunc("/users", get.GetUserListHandler)
 	http.HandleFunc("/users", post.PostUserListHandler)
 
-	//hostAddress := os.Getenv("HOST_ADDRESS")
-	hostAddress := ":8081"
+	hostAddress := os.Getenv("HOST_ADDRESS")
 	server := &http.Server{
 		Addr:    hostAddress,
 		Handler: nil,
