@@ -2,7 +2,7 @@ package get
 
 import (
 	"app/internal/rcon"
-	"fmt"
+	"encoding/json"
 	"net/http"
 )
 
@@ -17,8 +17,13 @@ func UserListHandler(w http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		return
 	}
-	_, err = fmt.Fprintf(w, list)
+	var response = userListResponse{Users: list}
+	err = json.NewEncoder(w).Encode(response)
 	if err != nil {
 		return
 	}
+}
+
+type userListResponse struct {
+	Users []string `json:"users"`
 }
