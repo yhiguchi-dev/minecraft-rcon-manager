@@ -18,7 +18,7 @@ func NewUserItemPostHandler(operator rcon.Operator) handler.PostHandler {
 }
 
 func (handler userItemPostHandler) Post(w http.ResponseWriter, r *http.Request) {
-	compile := regexp.MustCompile(`/whitelist/users/([a-zA-Z0-9_]+)/item`)
+	compile := regexp.MustCompile(`/users/([a-zA-Z0-9_]+)/item`)
 	group := compile.FindSubmatch([]byte(r.URL.Path))
 	userId := string(group[1])
 	var request = userItemRequest{}
