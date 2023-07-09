@@ -61,7 +61,7 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlePost(w http.ResponseWriter, r *http.Request) {
-	userItemRegex := regexp.MustCompile(`/users/([a-zA-Z0-9_]+$)/item`)
+	userItemRegex := regexp.MustCompile(`/users/[a-zA-Z0-9_]+/item`)
 	whitelistRegex := regexp.MustCompile(`/whitelist/users/[a-zA-Z0-9_]+$`)
 	url := r.URL.Path
 	if userItemRegex.MatchString(url) {
