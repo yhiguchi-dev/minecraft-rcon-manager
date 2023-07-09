@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"path/filepath"
+	"regexp"
 )
 
 type userItemPostHandler struct {
@@ -18,8 +18,9 @@ func NewUserItemPostHandler(operator rcon.Operator) handler.PostHandler {
 }
 
 func (handler userItemPostHandler) Post(w http.ResponseWriter, r *http.Request) {
-	baseDir, _ := filepath.Split(r.URL.Path)
-	_, userId := filepath.Split(baseDir)
+	compile := regexp.MustCompile(`/whitelist/users/([a-zA-Z0-9_]+)/item`)
+	group := compile.FindSubmatch([]byte(r.URL.Path))
+	userId := string(group[1])
 	var request = userItemRequest{}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	list, err := handler.operator.GiveItemToUser(userId, request.ItemId, request.Amount)
