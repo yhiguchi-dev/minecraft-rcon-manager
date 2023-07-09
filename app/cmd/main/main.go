@@ -1,8 +1,9 @@
 package main
 
 import (
-	"app/internal/handler/user/get"
-	"app/internal/handler/user/post"
+	"app/internal/handler"
+	"app/internal/handler/user"
+	"app/internal/handler/whitelist"
 	"app/internal/rcon"
 	"context"
 	"fmt"
@@ -32,11 +33,12 @@ func main() {
 		log.Fatal(err)
 	}
 	operator := rcon.NewOperator(client)
-	get.NewUserListHandler(operator)
-	post.NewUserItemHandler(operator)
-
-	http.HandleFunc("/users", get.UserListHandler)
-	http.HandleFunc("/users/", post.UserItemHandler)
+	userGetHandler := user.NewUserGetHandler(operator)
+	userItemPostHandler := user.NewUserItemPostHandler(operator)
+	whitelistGetHandler := whitelist.NewWhitelistGetHandler(operator)
+	whitelistPostHandler := whitelist.NewWhitelistPostHandler(operator)
+	handler.NewRootHandler(userGetHandler, userItemPostHandler, whitelistGetHandler, whitelistPostHandler)
+	http.HandleFunc("/", handler.RootHandler)
 
 	hostAddress := os.Getenv("HOST_ADDRESS")
 	server := &http.Server{
