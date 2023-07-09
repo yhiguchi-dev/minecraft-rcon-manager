@@ -37,7 +37,9 @@ func main() {
 	userItemPostHandler := user.NewUserItemPostHandler(operator)
 	whitelistGetHandler := whitelist.NewWhitelistGetHandler(operator)
 	whitelistPostHandler := whitelist.NewWhitelistPostHandler(operator)
-	handler.NewRootHandler(userGetHandler, userItemPostHandler, whitelistGetHandler, whitelistPostHandler)
+	whitelistUserPostHandler := whitelist.NewWhitelistUserPostHandler(operator)
+	whitelistUserDeleteHandler := whitelist.NewWhitelistUserDeleteHandler(operator)
+	handler.NewRootHandler(userGetHandler, userItemPostHandler, whitelistGetHandler, whitelistPostHandler, whitelistUserPostHandler, whitelistUserDeleteHandler)
 	http.HandleFunc("/", handler.RootHandler)
 
 	hostAddress := os.Getenv("HOST_ADDRESS")
