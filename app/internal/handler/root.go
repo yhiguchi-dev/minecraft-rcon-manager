@@ -61,8 +61,8 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlePost(w http.ResponseWriter, r *http.Request) {
-	userItemRegex := regexp.MustCompile("/users/(?!.*/)/item")
-	whitelistRegex := regexp.MustCompile("/whitelist/users/(?!.*/)")
+	userItemRegex := regexp.MustCompile(`/users/([a-zA-Z0-9_]+$)/item`)
+	whitelistRegex := regexp.MustCompile(`/whitelist/users/[a-zA-Z0-9_]+$`)
 	url := r.URL.Path
 	if userItemRegex.MatchString(url) {
 		userItemPostHandler.Post(w, r)
@@ -74,7 +74,7 @@ func handlePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleDelete(w http.ResponseWriter, r *http.Request) {
-	whitelistRegex := regexp.MustCompile("/whitelist/users/(?!.*/)")
+	whitelistRegex := regexp.MustCompile(`/whitelist/users/[a-zA-Z0-9_]+$`)
 	url := r.URL.Path
 	if whitelistRegex.MatchString(url) {
 		whitelistUserDeleteHandler.Delete(w, r)
