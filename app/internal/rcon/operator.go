@@ -13,6 +13,7 @@ type Operator interface {
 	DeactivateWhitelist() (string, error)
 	AddUserToWhitelist(userId string) (string, error)
 	RemoveUserToWhitelist(userId string) (string, error)
+	GetSeed() (string, error)
 }
 
 type operator struct {
@@ -91,6 +92,15 @@ func (operator *operator) AddUserToWhitelist(userId string) (string, error) {
 
 func (operator *operator) RemoveUserToWhitelist(userId string) (string, error) {
 	packet, err := operator.client.Send(fmt.Sprintf("whitelist remove %s", userId))
+	if err != nil {
+		return "", err
+	}
+	payload := string(packet.Payload)
+	return payload, nil
+}
+
+func (operator *operator) GetSeed() (string, error) {
+	packet, err := operator.client.Send("seed")
 	if err != nil {
 		return "", err
 	}

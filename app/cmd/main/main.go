@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/internal/handler"
+	"app/internal/handler/seed"
 	"app/internal/handler/user"
 	"app/internal/handler/whitelist"
 	"app/internal/rcon"
@@ -39,7 +40,8 @@ func main() {
 	whitelistPostHandler := whitelist.NewWhitelistPostHandler(operator)
 	whitelistUserPostHandler := whitelist.NewWhitelistUserPostHandler(operator)
 	whitelistUserDeleteHandler := whitelist.NewWhitelistUserDeleteHandler(operator)
-	handler.NewRootHandler(userGetHandler, userItemPostHandler, whitelistGetHandler, whitelistPostHandler, whitelistUserPostHandler, whitelistUserDeleteHandler)
+	seedGetHandler := seed.NewSeedGetHandler(operator)
+	handler.NewRootHandler(userGetHandler, userItemPostHandler, whitelistGetHandler, whitelistPostHandler, whitelistUserPostHandler, whitelistUserDeleteHandler, seedGetHandler)
 	http.HandleFunc("/", handler.RootHandler)
 
 	hostAddress := os.Getenv("HOST_ADDRESS")

@@ -12,14 +12,16 @@ var whitelistUserGetHandler GetHandler
 var whitelistPostHandler PostHandler
 var whitelistUserPostHandler PostHandler
 var whitelistUserDeleteHandler DeleteHandler
+var seedGetHandler GetHandler
 
-func NewRootHandler(_userGetHandler GetHandler, _userItemPostHandler PostHandler, _whitelistUserGetHandler GetHandler, _whitelistPostHandler PostHandler, _whitelistUserPostHandler PostHandler, _whitelistUserDeleteHandler DeleteHandler) {
+func NewRootHandler(_userGetHandler GetHandler, _userItemPostHandler PostHandler, _whitelistUserGetHandler GetHandler, _whitelistPostHandler PostHandler, _whitelistUserPostHandler PostHandler, _whitelistUserDeleteHandler DeleteHandler, _seedGetHandler GetHandler) {
 	userGetHandler = _userGetHandler
 	userItemPostHandler = _userItemPostHandler
 	whitelistUserGetHandler = _whitelistUserGetHandler
 	whitelistPostHandler = _whitelistPostHandler
 	whitelistUserPostHandler = _whitelistUserPostHandler
 	whitelistUserDeleteHandler = _whitelistUserDeleteHandler
+	seedGetHandler = _seedGetHandler
 }
 
 type GetHandler interface {
@@ -57,6 +59,8 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 		userGetHandler.Get(w, r)
 	} else if url == "/whitelist/users" {
 		whitelistUserGetHandler.Get(w, r)
+	} else if url == "/seed" {
+		seedGetHandler.Get(w, r)
 	}
 }
 
