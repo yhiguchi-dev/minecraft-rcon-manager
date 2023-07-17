@@ -37,9 +37,10 @@ type DeleteHandler interface {
 }
 
 func RootHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Headers", "*")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-Requested-With, Origin, X-Csrftoken, Accept, Cookie")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
 	switch r.Method {
 	case http.MethodGet:
 		handleGet(w, r)
@@ -47,6 +48,8 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 		handlePost(w, r)
 	case http.MethodDelete:
 		handleDelete(w, r)
+	case http.MethodOptions:
+		w.WriteHeader(http.StatusOK)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		_, err := fmt.Fprint(w, "Method not allowed.\n")
