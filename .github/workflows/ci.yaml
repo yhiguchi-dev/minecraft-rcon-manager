@@ -1,0 +1,20 @@
+name: Docker Image CI
+run-name: ${{ github.workflow }} (${{ github.ref_name }})
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  push:
+    uses: yhiguchi-dev/reusable-workflow/.github/workflows/docker-image.yaml@main
+    with:
+      build-context: ${{ matrix.build-context }}
+    strategy:
+      fail-fast: false
+      matrix:
+        build-context:
+          - app
