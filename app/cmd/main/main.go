@@ -24,7 +24,7 @@ func main() {
 	rconServerPort := os.Getenv("RCON_SERVER_PORT")
 	rconServerPassword := os.Getenv("RCON_SERVER_PASSWORD")
 
-	conn, err := net.DialTimeout("tcp", fmt.Sprintf("%s:%s", rconServerHost, rconServerPort), 3*time.Second)
+	conn, err := net.DialTimeout("tcp", fmt.Sprintf("%s:%s", rconServerHost, rconServerPort), 30*time.Second)
 
 	if err != nil {
 		log.Fatal(err)
